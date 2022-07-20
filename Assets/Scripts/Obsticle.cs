@@ -10,23 +10,36 @@ public class Obsticle : MonoBehaviour
     public TextMeshProUGUI leftText;
     public TextMeshProUGUI rightText;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        MathProblem firstProblem = MathGenerator.GenerateProblem();
-        MathProblem secondProblem = MathGenerator.GenerateProblem();
-        leftText.text = firstProblem.OperationVisual();
-        rightText.text = secondProblem.OperationVisual();
+    MathProblem leftProblem;
+    MathProblem rightProblem;
+
+    public const string leftBox = "LeftBox";
+    public const string rightBox = "RightBox";
+
+    public void InitObsticle(MathProblem leftProblem, MathProblem rightProblem) {
+        this.leftProblem = leftProblem;
+        this.rightProblem = rightProblem;
+        leftText.text = leftProblem.OperationVisual();
+        rightText.text = rightProblem.OperationVisual();
     }
 
-    private void OnTriggerEnter(Collider other)
-	{
-        Debug.Log(other);
-        if (other == left) {
-            leftText.fontSize = (float)FontStyle.Bold;
+    public void InitObsticle() {
+        leftProblem = MathGenerator.GenerateProblem();
+        rightProblem = MathGenerator.GenerateProblem();
+        leftText.text = leftProblem.OperationVisual();
+        rightText.text = rightProblem.OperationVisual();
+    }
+
+    public MathProblem WasHit(string side) {
+        
+        if (side == leftBox)
+        {
+            leftText.faceColor = Color.green;
+            return leftProblem;
         }
-        if (other == right) { 
-            
+        else {
+            rightText.faceColor = Color.green;
+            return rightProblem;
         }
-	}
+    }
 }
