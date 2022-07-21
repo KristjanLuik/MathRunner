@@ -22,7 +22,10 @@ public class TrackManager : MonoBehaviour
           (TrackType.Road,  (null, null)),
           (TrackType.Road,  (null, null)),
           (TrackType.Road,  (null, null)),
-          (TrackType.Obsticle,  (new MathProblem(Operator.Add, 30), new MathProblem(Operator.Add, 14)))
+          (TrackType.Obsticle,  (new MathProblem(Operator.Multiply, 10), new MathProblem(Operator.Add, 14))),
+          (TrackType.Road,  (null, null)),
+          (TrackType.Road,  (null, null)),
+          (TrackType.Road,  (null, null))
         });
     }
 
@@ -47,7 +50,7 @@ public class TrackManager : MonoBehaviour
             //Call obsticle init
             if (loadedRoad.tracks[i].Item1 == TrackType.Obsticle)
             {
-                generatedPiece.GetComponent<Obsticle>().InitObsticle(loadedRoad.tracks[i].Item2.Item1, loadedRoad.tracks[i].Item2.Item1);
+                generatedPiece.GetComponent<Obsticle>().InitObsticle(loadedRoad.tracks[i].Item2.Item1, loadedRoad.tracks[i].Item2.Item2);
             }
             this._nextPiecePosition.z += trackPieces[loadedRoad.tracks[i].Item1.GetHashCode()].offset.magnitude;
             this._nextPiecePosition.x = trackPieces[loadedRoad.tracks[i].Item1.GetHashCode()].offset.x;

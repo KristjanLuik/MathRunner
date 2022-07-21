@@ -18,7 +18,7 @@ public class Arrow : MonoBehaviour
         set {
             UpdateArrowVisual(value);
             number_of_arrows = value;
-        }  // set method
+        }
     }
     public GameObject arrow_prefab;
 
@@ -74,6 +74,7 @@ public class Arrow : MonoBehaviour
             }
         }
         UIManager.instance.updateArrowUI(newAmountOfArrows);
+
         return true;
     }
 
@@ -122,7 +123,7 @@ public class Arrow : MonoBehaviour
 
         int newArrowAmount = newArrowCount(triggeredProblem);
         Debug.Log(string.Format("newArrowAmount: {0}", newArrowAmount));
-        UpdateArrowVisual(newArrowAmount);
+        this.NumberOfArrows = newArrowAmount;
     }
 
     public int newArrowCount(MathProblem mathProblem) {
