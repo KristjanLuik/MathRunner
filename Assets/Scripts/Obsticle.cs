@@ -23,14 +23,19 @@ public class Obsticle : MonoBehaviour
         rightText.text = rightProblem.OperationVisual();
     }
 
-    public void InitObsticle() {
+	private void OnTriggerEnter(Collider other)
+	{
+        Debug.Log("pie");
+	}
+
+	public void InitObsticle() {
         leftProblem = MathGenerator.GenerateProblem();
         rightProblem = MathGenerator.GenerateProblem();
         leftText.text = leftProblem.OperationVisual();
         rightText.text = rightProblem.OperationVisual();
     }
 
-    public MathProblem WasHit(string side) {
+        public MathProblem WasHit(string side) {
         
         if (side == leftBox)
         {

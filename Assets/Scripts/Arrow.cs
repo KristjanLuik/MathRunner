@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using DG.Tweening;
 
 public class Arrow : MonoBehaviour
 {
@@ -89,6 +90,12 @@ public class Arrow : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (Keyboard.current[Key.Q].wasReleasedThisFrame) {
+            int randomIndex = Random.Range(0, Arrows.Count);
+            //Arrows[randomIndex].transform.Translate(new Vector3(5,5,5));
+            Arrows[randomIndex].transform.DOShakePosition(3);
+            //Arrows[randomIndex].transform.DOLocalRotate(new Vector3(180f, 0, 0), 1f, RotateMode.LocalAxisAdd);
+        }
         if (Keyboard.current[Key.A].isPressed && arrow_active_road > 0) {
             arrow_active_road--;
             newleft = new Vector3(GameManager.instance.RoadPosition[arrow_active_road].x, transform.position.y, transform.position.z);
@@ -116,13 +123,10 @@ public class Arrow : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other) {
+	private void OnTriggerEnter(Collider other)
+	{
         MathProblem triggeredProblem = other.gameObject.GetComponentInParent<Obsticle>().WasHit(other.name);
-        Debug.Log(triggeredProblem);
-        Debug.Log(string.Format("number_of_arrows: {0}", number_of_arrows));
-
         int newArrowAmount = newArrowCount(triggeredProblem);
-        Debug.Log(string.Format("newArrowAmount: {0}", newArrowAmount));
         this.NumberOfArrows = newArrowAmount;
     }
 
@@ -141,7 +145,7 @@ public class Arrow : MonoBehaviour
         }
     }
 
-    void OnDrawGizmos()
+   /* void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
         Gizmos.DrawSphere(transform.position, 0.1f);
@@ -149,5 +153,5 @@ public class Arrow : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(newleft, 0.1f);
         Gizmos.DrawSphere(newright, 0.1f);
-    }
+    }*/
 }

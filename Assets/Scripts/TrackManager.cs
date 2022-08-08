@@ -9,8 +9,10 @@ public class TrackManager : MonoBehaviour
     static public TrackManager instance { get { return s_Instance; } }
     static protected TrackManager s_Instance;
     public Vector3 _startPosition;
+    public Vector3 _endPosition;
     public Vector3 _nextPiecePosition;
     public List<TrackMeta> trackPieces = new List<TrackMeta>();
+    public GameObject endpiece;
     private PlayerData savestuff;
 
     protected void Awake()
@@ -55,6 +57,12 @@ public class TrackManager : MonoBehaviour
             this._nextPiecePosition.z += trackPieces[loadedRoad.tracks[i].Item1.GetHashCode()].offset.magnitude;
             this._nextPiecePosition.x = trackPieces[loadedRoad.tracks[i].Item1.GetHashCode()].offset.x;
         }
+
+     Instantiate(
+        endpiece,
+        this._nextPiecePosition + _endPosition,
+        endpiece.transform.rotation
+     );
     }
 
     [ContextMenu("Generate Testing road")]
@@ -71,7 +79,7 @@ public class TrackManager : MonoBehaviour
 		}
     }
 
-    // Update is called once per frame
+
     [ContextMenu("Generate Next Piece")]
     void GenerateNextPiece(TrackType trackType) 
     {

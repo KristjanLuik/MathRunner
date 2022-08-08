@@ -4,6 +4,7 @@ using UnityEngine;
 using static TrackManager;
 using System;
 
+[Serializable]
 public class PlayerData
 {
 	public List<(TrackType, (MathProblem, MathProblem))> tracks;
