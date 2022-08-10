@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 320078684}
   - component: {fileID: 320078686}
   - component: {fileID: 320078687}
+  - component: {fileID: 320078688}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -199,6 +200,19 @@ MonoBehaviour:
   distancePercentage: 0.1
   maximumTime: 1
   directionTreshold: 0.9
+--- !u!114 &320078688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320078683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1356cb323ed3b3442bd1d64464b710be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowAmount: {fileID: 1179144911}
 --- !u!1 &422562265
 GameObject:
   m_ObjectHideFlags: 0
@@ -229,7 +243,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startPosition: {x: 0, y: 0, z: 2}
-  _endPosition: {x: 0, y: 0, z: 0}
+  _endPosition: {x: 0.06, y: 1.726, z: 0}
   _nextPiecePosition: {x: 0.009, y: 0, z: 3.004027}
   trackPieces:
   - offset: {x: 0.009, y: 0, z: 1.502}

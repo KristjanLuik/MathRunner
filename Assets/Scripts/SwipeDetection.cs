@@ -54,9 +54,6 @@ public class SwipeDetection : MonoBehaviour
 
 	private void DetectSwipe()
 	{
-		//Debug.Log(string.Format("disntace2: {0}, distance3: {1}", Vector2.Distance(startPosition, endPosition), Vector3.Distance(startPosition, endPosition)));
-		//Debug.Log(string.Format("distance: {0},  start: {1} end: {2} distance: {3}", Vector3.Distance(startPosition, endPosition) >= this.minimumDistance, startPosition, endPosition, Vector3.Distance(startPosition, endPosition)));
-		//Debug.Log(string.Format("time end value: {0}   time diff: {1} start: {2}   end: {3}", (this.endTime - this.startTime) <= this.maximumTime, (this.endTime - this.startTime), this.startTime, this.endTime));
 		if (
 			Vector3.Distance(startPosition, endPosition) >= this.minimumDistance /*&&
 			(this.endTime - this.startTime) <= this.maximumTime*/)

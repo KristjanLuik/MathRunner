@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 [DefaultExecutionOrder(-1)]
 public class InputManager : Singleton<InputManager>
@@ -10,6 +11,8 @@ public class InputManager : Singleton<InputManager>
 	public event StartTouch OnStartTouch;
 	public delegate void EndTouch(Vector2 position, float time);
 	public event EndTouch OnEndTouch;
+	public delegate void KeyboardPress(Key pressedKey);
+	public event KeyboardPress OnKeyboardPress;
 	#endregion
 
 	private PlayerInput inputControls;
@@ -35,8 +38,14 @@ public class InputManager : Singleton<InputManager>
 	{
 		inputControls.Touch.TouchInput.started += ctx => StartTouchPrimary(ctx);
 		inputControls.Touch.TouchInput.canceled += ctx => EndTouchPrimary(ctx);
+		inputControls.Keyboard.Move.performed += ctx => DoKeyboardInput(ctx);
 	}
 
+	private void DoKeyboardInput(InputAction.CallbackContext ctx)
+	{
+		//ctx.control.keyCode
+		OnKeyboardPress?.Invoke(((KeyControl)ctx.control).keyCode);
+	}
 
 	private void StartTouchPrimary(InputAction.CallbackContext ctx)
 	{

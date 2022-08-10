@@ -7,12 +7,17 @@ using DG.Tweening;
 
 public class Arrow : MonoBehaviour
 {
+
+    private GameManager gameManagerInstance;
+    private InputManager inputManagerInstance;
+    private UIManager uiManagerInstane;
     public static Arrow instance { get { return s_Instance; } }
     static protected Arrow s_Instance;
     public float m_Speed = 0;
     private float m_Time_to_move_to_place = 5f;
     private List<GameObject> Arrows = new List<GameObject>();
     private int number_of_arrows = 0;
+
     public int NumberOfArrows   // property
     {
         get { return number_of_arrows; }   // get method
@@ -27,9 +32,27 @@ public class Arrow : MonoBehaviour
     public int number_of_active_roads;
 
     public Vector3 newleft, newright;
+
+
+    private void OnEnable()
+    {
+        inputManagerInstance.OnKeyboardPress += KeyboardButtonPress;
+
+    }
+
+    private void OnDisable()
+    {
+        inputManagerInstance.OnKeyboardPress -= KeyboardButtonPress;
+    }
+
+
     protected void Awake()
     {
         s_Instance = this;
+        gameManagerInstance = GameManager.Instance;
+        inputManagerInstance = InputManager.Instance;
+        uiManagerInstane = UIManager.Instance;
+        Debug.Log(uiManagerInstane);
     }
 
     void Start()
@@ -37,10 +60,10 @@ public class Arrow : MonoBehaviour
         this.NumberOfArrows = 1;
 
         // Pick a starting road at random
-        number_of_active_roads = GameManager.instance.RoadPosition.Count - 1;
-        int roadIndex = Random.Range(0, GameManager.instance.RoadPosition.Count);
+        number_of_active_roads = gameManagerInstance.RoadPosition.Count - 1;
+        int roadIndex = Random.Range(0, gameManagerInstance.RoadPosition.Count);
         arrow_active_road = roadIndex;
-        Vector3 randomStartPosition = GameManager.instance.RoadPosition[roadIndex];
+        Vector3 randomStartPosition = gameManagerInstance.RoadPosition[roadIndex];
         transform.position = randomStartPosition;
     }
 
@@ -74,7 +97,7 @@ public class Arrow : MonoBehaviour
                 MoveArrowPosition(gameObjectArrow);
             }
         }
-        UIManager.instance.updateArrowUI(newAmountOfArrows);
+        uiManagerInstane.updateArrowUI(newAmountOfArrows);
 
         return true;
     }
@@ -93,21 +116,16 @@ public class Arrow : MonoBehaviour
         if (Keyboard.current[Key.Q].wasReleasedThisFrame) {
             int randomIndex = Random.Range(0, Arrows.Count);
             //Arrows[randomIndex].transform.Translate(new Vector3(5,5,5));
-            Arrows[randomIndex].transform.DOShakePosition(3);
+            //Arrows[randomIndex].transform.DOShakePosition(3);
+            Arrows[randomIndex].transform.DOScaleX(3, 3);
+            Arrows[randomIndex].transform.DOScaleY(3, 3);
             //Arrows[randomIndex].transform.DOLocalRotate(new Vector3(180f, 0, 0), 1f, RotateMode.LocalAxisAdd);
         }
-        if (Keyboard.current[Key.A].isPressed && arrow_active_road > 0) {
-            arrow_active_road--;
-            newleft = new Vector3(GameManager.instance.RoadPosition[arrow_active_road].x, transform.position.y, transform.position.z);
-            transform.position = newleft;
-        }
-        if (Keyboard.current[Key.D].isPressed && arrow_active_road < number_of_active_roads)
-        {
-            arrow_active_road++;
-            newright = new Vector3(GameManager.instance.RoadPosition[arrow_active_road].x, transform.position.y, transform.position.z);
-            transform.position = newright;
-        }
     }
+
+   
+
+
 
     private async void MoveArrowPosition(GameObject arrowToMove) {
         Vector3 arrowToMovePosition = arrowToMove.transform.position;
@@ -145,13 +163,29 @@ public class Arrow : MonoBehaviour
         }
     }
 
-   /* void OnDrawGizmos()
+    private void KeyboardButtonPress(Key pressedKey)
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawSphere(transform.position, 0.1f);
+        if (pressedKey == Key.A && arrow_active_road > 0)
+        {
+            arrow_active_road--;
+            newleft = new Vector3(gameManagerInstance.RoadPosition[arrow_active_road].x, transform.position.y, transform.position.z);
+            transform.position = newleft;
+        }
+        if (pressedKey == Key.D && arrow_active_road < number_of_active_roads)
+        {
+            arrow_active_road++;
+            newright = new Vector3(gameManagerInstance.RoadPosition[arrow_active_road].x, transform.position.y, transform.position.z);
+            transform.position = newright;
+        }
+    }
 
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(newleft, 0.1f);
-        Gizmos.DrawSphere(newright, 0.1f);
-    }*/
+    /* void OnDrawGizmos()
+     {
+         Gizmos.color = Color.green;
+         Gizmos.DrawSphere(transform.position, 0.1f);
+
+         Gizmos.color = Color.yellow;
+         Gizmos.DrawSphere(newleft, 0.1f);
+         Gizmos.DrawSphere(newright, 0.1f);
+     }*/
 }
