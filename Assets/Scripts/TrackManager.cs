@@ -4,22 +4,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using Operatorns;
 
-public class TrackManager : MonoBehaviour
+public class TrackManager : SingletonPersistant<TrackManager>
 {
-    static public TrackManager instance { get { return s_Instance; } }
-    static protected TrackManager s_Instance;
     public Vector3 _startPosition;
     public Vector3 _endPosition;
-    public Vector3 _nextPiecePosition;
+
+	[SerializeField, Tooltip("Location to where to place nex piece")]
+    private Vector3 _nextPiecePosition;
     public List<TrackMeta> trackPieces = new List<TrackMeta>();
     public GameObject endpiece;
+
+
     private PlayerData savestuff;
 
     protected void Awake()
     {
-        s_Instance = this;
         savestuff = new PlayerData(new List<(TrackType, (MathProblem, MathProblem))> {
-          //(TrackType.Obsticle,(new MathProblem(Operator.Add, 5), new MathProblem(Operator.Add, 10)))
           (TrackType.Obsticle,  (new MathProblem(Operator.Add, 5), new MathProblem(Operator.Add, 10))),
           (TrackType.Road,  (null, null)),
           (TrackType.Road,  (null, null)),
@@ -34,7 +34,6 @@ public class TrackManager : MonoBehaviour
     void Start()
     {
         this._nextPiecePosition = _startPosition;
-        //GenerateTestingroad();
         this.LoadRoad(savestuff);
     }
 
@@ -58,11 +57,12 @@ public class TrackManager : MonoBehaviour
             this._nextPiecePosition.x = trackPieces[loadedRoad.tracks[i].Item1.GetHashCode()].offset.x;
         }
 
-     Instantiate(
+     GameObject endpiecego = Instantiate(
         endpiece,
         this._nextPiecePosition + _endPosition,
         endpiece.transform.rotation
      );
+        endpiecego.GetComponent<EndTrigger>().SetNeededArrowAMount(savestuff.endArrowRequiredAmount);
     }
 
     [ContextMenu("Generate Testing road")]

@@ -8,9 +8,11 @@ using System;
 public class PlayerData
 {
 	public List<(TrackType, (MathProblem, MathProblem))> tracks;
+	public int endArrowRequiredAmount;
 
-	public PlayerData(List<(TrackType, (MathProblem, MathProblem))> trackStuff)
+	public PlayerData(List<(TrackType, (MathProblem, MathProblem))> trackStuff, int arrowRequiredAmount = 1)
 	{
 		this.tracks = trackStuff;
+		this.endArrowRequiredAmount = arrowRequiredAmount;
 	}
 }
