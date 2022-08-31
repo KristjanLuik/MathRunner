@@ -17,7 +17,7 @@ public class EndTrigger : MonoBehaviour
 
 	public void WasHit()
     {
-        arrowInstance.HitEndGoal(transform.position);
+        arrowInstance.HitEndGoal(heart.transform.position);
 	}
 
     public void SetNeededArrowAMount(int neededArrows) {

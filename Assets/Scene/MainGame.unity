@@ -960,7 +960,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc798989426946f49afd9e643da9951f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Speed: 1
+  m_Speed: 4
   currentArrowState: 0
   arrow_prefab: {fileID: 7075330520797719138, guid: e23ad58e73d84094eb8daf7dff81ac5b,
     type: 3}

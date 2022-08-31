@@ -19,6 +19,9 @@ public class Arrow : MonoBehaviour
 
 	private int number_of_arrows = 0;
 
+
+	private Vector3 lastposition;
+
 	public int NumberOfArrows   // property
 	{
 		get { return number_of_arrows; }   // get method
@@ -40,9 +43,7 @@ public class Arrow : MonoBehaviour
 	{
 		inputManagerInstance.OnKeyboardPress += KeyboardButtonPress;
 		gameManagerInstance.OngameStateChanged += GameModeSwitch;
-
 	}
-
 
 
 	private void OnDisable()
@@ -61,7 +62,7 @@ public class Arrow : MonoBehaviour
 	void Start()
 	{
 		this.NumberOfArrows = 1;
-
+		lastposition = this.Arrows[0].transform.position;
 		// Pick a starting road at random
 		number_of_active_roads = gameManagerInstance.RoadPosition.Count - 1;
 		int roadIndex = Random.Range(0, gameManagerInstance.RoadPosition.Count);
@@ -98,7 +99,7 @@ public class Arrow : MonoBehaviour
 			//Add arrows
 			for (int i = 0; i < arrowDiffrence; i++)
 			{
-				GameObject gameObjectArrow = Instantiate(arrow_prefab, transform.position, Quaternion.Euler(90f, 0f, 0f), transform);
+				GameObject gameObjectArrow = Instantiate(arrow_prefab, transform.position, Quaternion.identity, transform);
 				Arrows.Add(gameObjectArrow);
 				MoveArrowPosition(gameObjectArrow);
 			}
@@ -150,14 +151,20 @@ public class Arrow : MonoBehaviour
 		float endTime = Time.time + durration;
 		Vector3 startPosition = arrow.transform.position;
 		float timeBetween = endTime - Time.time;
+		Quaternion lookRotation;
+
+		Vector3 targetDirection = target - transform.position;
+		Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, timeBetween, 0.0f);
 
 		while (Time.time < endTime) {
-			//Debug.Log(timeBetween);
-			transform.position = Vector3.Lerp(startPosition, target, timeBetween);
+			arrow.transform.position = Vector3.Lerp(target, startPosition, timeBetween);
+			lastposition = arrow.transform.position;
+			lookRotation = Quaternion.LookRotation(targetDirection.normalized);
+			arrow.transform.rotation = Quaternion.Slerp(lookRotation, arrow.transform.rotation, timeBetween);
+			Debug.Log(arrow.transform.rotation.eulerAngles);
 			timeBetween = endTime - Time.time;
 			await Task.Yield();
 		}
-
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -189,12 +196,15 @@ public class Arrow : MonoBehaviour
 	}
 
 	public void HitEndGoal(Vector3 target) {
-		/*List<Task> tasks = new List<Task>();
+		this.currentArrowState = ArrowState.HALT;
+		List<Task> tasks = new List<Task>();
+		transform.DetachChildren();
 		for (int i = 0; i < Arrows.Count; i++)
 		{
-			tasks.Add(AttackArrowToTarget(1f, Arrows[i], target));
+			//tasks.Add(AttackArrowToTarget(1f, Arrows[i], target));
+			_ = AttackArrowToTarget(2f, Arrows[i], target);
 		}
-		Task.WhenAll(tasks).GetAwaiter().GetResult();*/
+		//Task.WhenAll(tasks).GetAwaiter().GetResult();
 	}
 
 	private void KeyboardButtonPress(Key pressedKey)
@@ -226,13 +236,9 @@ public class Arrow : MonoBehaviour
 		MOVING
 	}
 
-	/* void OnDrawGizmos()
+	void OnDrawGizmos()
      {
          Gizmos.color = Color.green;
-         Gizmos.DrawSphere(transform.position, 0.1f);
-
-         Gizmos.color = Color.yellow;
-         Gizmos.DrawSphere(newleft, 0.1f);
-         Gizmos.DrawSphere(newright, 0.1f);
-     }*/
+         Gizmos.DrawSphere(lastposition, 0.1f);
+     }
 }
